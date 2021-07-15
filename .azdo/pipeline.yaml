@@ -1,4 +1,4 @@
-name: signedcontainer-$(build.buildnumber)
+name: signedcontainer-$(Build.BuildId)
 
 trigger:
 - trust
@@ -30,7 +30,7 @@ steps:
     containerRegistry: $(containerRegistryServiceConnection)
     repository: $(imageRepository)
     tags: |
-      2.0.$(Build.BuildNumber)-signed
+      2.0.$(Build.BuildId)-signed
     arguments: '--disable-content-trust=false'
 
 - task: Docker@2
@@ -39,7 +39,7 @@ steps:
     containerRegistry: $(containerRegistryServiceConnection)
     repository: $(imageRepository)
     tags: |
-      2.0.$(Build.BuildNumber)-signed
+      2.0.$(Build.BuildId)-signed
     arguments: '--disable-content-trust=false'
   env:
     DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: $(devops-passphrase)

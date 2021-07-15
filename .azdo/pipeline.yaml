@@ -8,10 +8,14 @@ pool:
 
 variables:
 - group: securecontainervars
+- name: keyfingerprint
+  value: 865d649308dc194b52a9236ebf6811252fad356fac73d44c10bcd9c1361402fd
 - name: containerRegistryServiceConnection
   value: mjgk8sacr
 - name: imageRepository
   value: secure/voting/app
+- name: tag
+  value: 2.0.$(Build.BuildId)-signed
 
 steps:
 - task: Docker@2
@@ -21,7 +25,7 @@ steps:
 
 - script: |
     mkdir -p $(DOCKER_CONFIG)/trust/private
-    echo "$(devops-signing-key)" $(DOCKER_CONFIG)/trust/private/devops.key
+    echo "$(devops-signing-key)" $(DOCKER_CONFIG)/trust/private/$(keyfingerprint).key
 
 - task: Docker@2
   inputs:
@@ -30,7 +34,7 @@ steps:
     containerRegistry: $(containerRegistryServiceConnection)
     repository: $(imageRepository)
     tags: |
-      2.0.$(Build.BuildId)-signed
+      $(tag)
     arguments: '--disable-content-trust=false'
 
 - task: Docker@2
@@ -39,7 +43,7 @@ steps:
     containerRegistry: $(containerRegistryServiceConnection)
     repository: $(imageRepository)
     tags: |
-      2.0.$(Build.BuildId)-signed
+      $(tag)
     arguments: '--disable-content-trust=false'
   env:
     DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: $(devops-passphrase)

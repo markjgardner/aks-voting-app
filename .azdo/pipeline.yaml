@@ -25,7 +25,7 @@ steps:
 
 - script: |
     mkdir -p $(DOCKER_CONFIG)/trust/private
-    echo "$(devops-signing-key)" $(DOCKER_CONFIG)/trust/private/$(keyfingerprint).key
+    echo "$(devops-signing-key)" > $(DOCKER_CONFIG)/trust/private/$(keyfingerprint).key
 
 - task: Docker@2
   inputs:

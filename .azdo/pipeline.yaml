@@ -1,3 +1,6 @@
+# Pipeline documentation available here - https://docs.microsoft.com/azure/devops/pipelines/ecosystems/containers/content-trust
+# Additional information on ACR support for content trust available here - https://docs.microsoft.com/azure/container-registry/container-registry-content-trust
+
 name: signedcontainer-$(Build.BuildId)
 
 trigger:

@@ -12,8 +12,6 @@ variables:
   value: mjgk8sacr
 - name: imageRepository
   value: secure/voting/app
-- name: tag
-  value: 2.0.$(Build.BuildNumber)-signed
 
 steps:
 - task: Docker@2
@@ -32,7 +30,7 @@ steps:
     containerRegistry: $(containerRegistryServiceConnection)
     repository: $(imageRepository)
     tags: |
-      $(tag)
+      2.0.$(Build.BuildNumber)-signed
     arguments: '--disable-content-trust=false'
 
 - task: Docker@2
@@ -41,7 +39,7 @@ steps:
     containerRegistry: $(containerRegistryServiceConnection)
     repository: $(imageRepository)
     tags: |
-      $(tag)
+      2.0.$(Build.BuildNumber)-signed
     arguments: '--disable-content-trust=false'
   env:
     DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: $(devops-passphrase)

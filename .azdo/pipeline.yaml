@@ -1,0 +1,47 @@
+name: signedcontainer-$(build.buildnumber)
+
+trigger:
+- trust
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+- group: securecontainervars
+- name: containerRegistryServiceConnection
+  value: mjgk8sacr
+- name: imageRepository
+  value: secure/voting/app
+- name: tag
+  value: 2.0.$(build.buildnumber)-signed
+
+steps:
+- task: Docker@2
+  inputs:
+    command: login
+    containerRegistry: $(containerRegistryServiceConnection)
+
+- script: |
+    mkdir -p $(DOCKER_CONFIG)/trust/private
+     $(DOCKER_CONFIG)/trust/private/devops.key
+
+- task: Docker@2
+  inputs:
+    command: build
+    Dockerfile: '**/Dockerfile'
+    containerRegistry: $(containerRegistryServiceConnection)
+    repository: $(imageRepository)
+    tags: |
+      $(tag)
+    arguments: '--disable-content-trust=false'
+
+- task: Docker@2
+  inputs: 
+    command: push
+    containerRegistry: $(containerRegistryServiceConnection)
+    repository: $(imageRepository)
+    tags: |
+      $(tag)
+    arguments: '--disable-content-trust=false'
+  env:
+    DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: $(repository-passphrase)

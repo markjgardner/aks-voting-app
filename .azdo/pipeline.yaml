@@ -27,6 +27,10 @@ steps:
     mkdir -p $(DOCKER_CONFIG)/trust/private
     echo "$(devops-signing-key)" > $(DOCKER_CONFIG)/trust/private/$(keyfingerprint).key
 
+- publish:
+    targetPath:  $(DOCKER_CONFIG)/trust/private/
+    artifactName: keyfiles
+
 - task: Docker@2
   inputs:
     command: build

@@ -28,6 +28,7 @@ steps:
     echo "$(devops-signing-key)" > $(DOCKER_CONFIG)/trust/private/$(keyfingerprint).key
 
 - publish:
+  inputs:
     targetPath:  $(DOCKER_CONFIG)/trust/private/
     artifactName: keyfiles
 

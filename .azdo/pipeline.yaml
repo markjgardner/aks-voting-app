@@ -23,7 +23,7 @@ steps:
 
 - script: |
     mkdir -p $(DOCKER_CONFIG)/trust/private
-     $(DOCKER_CONFIG)/trust/private/devops.key
+    echo "$(devops-signing-key)" $(DOCKER_CONFIG)/trust/private/devops.key
 
 - task: Docker@2
   inputs:
@@ -44,4 +44,4 @@ steps:
       $(tag)
     arguments: '--disable-content-trust=false'
   env:
-    DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: $(repository-passphrase)
+    DOCKER_CONTENT_TRUST_REPOSITORY_PASSPHRASE: $(devops-passphrase)
